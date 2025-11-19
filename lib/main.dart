@@ -37,6 +37,7 @@ class Splash extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 247, 213, 255),
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 98, 39, 176),
         title: Text(title, style: TextStyle(color: Colors.white)),
@@ -45,6 +46,10 @@ class Splash extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            Text('Welcome to the Chat App!', style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
+            SizedBox(height: 20),
+            Text('Enter a chatroom and join the fun!', style: TextStyle(fontSize: 18)),
+            SizedBox(height: 40),
             ElevatedButton(
               onPressed: () {
                 Navigator.push(
@@ -56,6 +61,7 @@ class Splash extends StatelessWidget {
               },
               child: Text('Sign In'),
             ),
+            SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
                 Navigator.push(
@@ -110,6 +116,7 @@ class _SigninState extends State<Signin> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 247, 213, 255),
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 98, 39, 176),
         title: Text(widget.title, style: TextStyle(color: Colors.white)),
@@ -139,6 +146,7 @@ class _SigninState extends State<Signin> {
                   return null;
                 },
               ),
+              SizedBox(height: 10),
               TextFormField(
                 controller: _passwordController,
                 decoration: InputDecoration(
@@ -250,6 +258,7 @@ class _SignupState extends State<Signup> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 247, 213, 255),
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 98, 39, 176),
         title: Text('Signup', style: TextStyle(color: Colors.white)),
@@ -278,7 +287,7 @@ class _SignupState extends State<Signup> {
                         return null;
                       },
                     ),
-
+                    SizedBox(height: 10),
                     TextFormField(
                       controller: _displayNameController,
                       decoration: InputDecoration(
@@ -305,6 +314,7 @@ class _SignupState extends State<Signup> {
                         return null;
                       },
                     ),
+                    SizedBox(height: 10),
                     TextFormField(
                       controller: _lastNameController,
                       decoration: InputDecoration(
@@ -318,6 +328,7 @@ class _SignupState extends State<Signup> {
                         return null;
                       },
                     ),
+                    SizedBox(height: 10),
                     TextFormField(
                       controller: _passwordController,
                       decoration: InputDecoration(
@@ -332,6 +343,7 @@ class _SignupState extends State<Signup> {
                         return null;
                       },
                     ),
+                    SizedBox(height: 20),
                     Container(
                       padding: const EdgeInsets.symmetric(vertical: 16.0),
                       alignment: Alignment.center,
@@ -378,6 +390,7 @@ class _SelectScreenState extends State<SelectScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 247, 213, 255),
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 98, 39, 176),
         title: Text('Message Boards', style: TextStyle(color: Colors.white),),
@@ -737,12 +750,14 @@ class _profilescreenState extends State<profilescreen> {
   Widget build(BuildContext context) {
     if (_isLoadingData) {
       return Scaffold(
+        backgroundColor: const Color.fromARGB(255, 247, 213, 255),
         appBar: AppBar(title: Text('Profile Screen', style: TextStyle(color: Colors.white)), backgroundColor: const Color.fromARGB(255, 98, 39, 176),),
         body: Center(child: CircularProgressIndicator()),
       );
     }
 
     return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 247, 213, 255),
       appBar: AppBar(title: Text('Profile Screen', style: TextStyle(color: Colors.white)), backgroundColor: const Color.fromARGB(255, 98, 39, 176),),
       body: Center(
         child: Column(
@@ -970,6 +985,7 @@ class _settingsscreenState extends State<settingsscreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 247, 213, 255),
       appBar: AppBar(title: Text('Settings Screen', style: TextStyle(color: Colors.white)), backgroundColor: const Color.fromARGB(255, 98, 39, 176),),
       body: Center(
         child: Column(
@@ -998,6 +1014,7 @@ class _settingsscreenState extends State<settingsscreen> {
                       return null;
                     },
                   ),
+                  SizedBox(height: 10),
                   TextFormField(
                     controller: _lastNameController,
                     decoration: InputDecoration(
@@ -1011,7 +1028,7 @@ class _settingsscreenState extends State<settingsscreen> {
                       return null;
                     },
                   ),
-
+                  SizedBox(height: 15),
                   ElevatedButton(
                     onPressed: () {
                       if (_nameKey.currentState!.validate()) {
@@ -1023,9 +1040,8 @@ class _settingsscreenState extends State<settingsscreen> {
                 ],
               ),
             ),
-            SizedBox(height: 20),
-            Text('Update Credentials (Current Password Required)'),
             SizedBox(height: 10),
+            Text('Update Credentials (Current Password Required)'),
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
@@ -1047,7 +1063,7 @@ class _settingsscreenState extends State<settingsscreen> {
                       obscureText: true,
                     ),
                   ),
-                  SizedBox(height: 20),
+                  SizedBox(height: 15),
                   Form(
                     key: _passKey,
                     child: Column(
@@ -1066,7 +1082,7 @@ class _settingsscreenState extends State<settingsscreen> {
                           },
                           obscureText: true,
                         ),
-                        SizedBox(height: 10),
+                        SizedBox(height: 5),
                         ElevatedButton(
                           onPressed: () {
                             bool currentPassValid =
@@ -1236,6 +1252,7 @@ class _messageroombodyState extends State<messageroombody> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 247, 213, 255),
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 98, 39, 176),
         title: Text(widget.title, style: TextStyle(color: Colors.white)),
