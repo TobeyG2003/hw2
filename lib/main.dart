@@ -380,51 +380,168 @@ class _SelectScreenState extends State<SelectScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text('Selection'),
+        title: Text('Message Boards'),
       ),
       drawer: appbarDrawer(),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            ElevatedButton(
-              onPressed: () {
+      body: Column(
+        children: <Widget>[
+          Expanded(
+            child: InkWell(
+              onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => GamesScreen()),
                 );
               },
-              child: Text('Games'),
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Container(
+                    width: double.infinity,
+                    height: double.infinity,
+                    child: Image.asset(
+                      'assets/game.jpg',
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: Text(
+                        'Games',
+                        style: TextStyle(
+                          fontSize: 56,
+                          fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                        
+                      ),
+                    ),
+                    ),
+                  ),
+                ],
+              ),
             ),
-            ElevatedButton(
-              onPressed: () {
+          ),
+          Expanded(
+            child: InkWell(
+              onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => FilmsScreen()),
                 );
               },
-              child: Text('Films'),
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Container(
+                    width: double.infinity,
+                    height: double.infinity,
+                    child: Image.asset(
+                      'assets/film.jpg',
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: Text(
+                        'Films',
+                        style: TextStyle(
+                          fontSize: 56,
+                          fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                    ),
+                  ),
+                ],
+              ),
             ),
-            ElevatedButton(
-              onPressed: () {
+          ),
+          Expanded(
+            child: InkWell(
+              onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => TVScreen()),
                 );
               },
-              child: Text('TV Shows'),
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Container(
+                    width: double.infinity,
+                    height: double.infinity,
+                    child: Image.asset(
+                      'assets/tv.jpg',
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: Text(
+                        'TV Shows',
+                        style: TextStyle(
+                          fontSize: 56,
+                          fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ),
+                    ),
+                  ),
+                ],
+              ),
             ),
-            ElevatedButton(
-              onPressed: () {
+          ),
+          Expanded(
+            child: InkWell(
+              onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => BooksScreen()),
                 );
               },
-              child: Text('Books'),
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Container(
+                    width: double.infinity,
+                    height: double.infinity,
+                    child: Image.asset(
+                      'assets/book.jpg',
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: Text(
+                        'Books',
+                        style: TextStyle(
+                          fontSize: 56,
+                          fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        shadows: [
+                          Shadow(
+                            blurRadius: 10.0,
+                            color: Colors.black,
+                            offset: Offset(2.0, 2.0),
+                          ),
+                        ],
+                      ),
+                    ),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
