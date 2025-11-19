@@ -4,6 +4,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'firebase_options.dart';
+import 'dart:convert';
+import 'dart:typed_data';
+import 'package:image_picker/image_picker.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -527,6 +530,111 @@ class profilescreen extends StatefulWidget {
 }
 
 class _profilescreenState extends State<profilescreen> {
+  final TextEditingController _displayNameController = TextEditingController();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  bool _isLoading = false;
+  String? name;
+  String? currentimage;
+  String? imagestring;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+
+  Future<void> _loadUserData() async {
+    try {
+      String? userId = _auth.currentUser?.uid;
+      if (userId != null) {
+        DocumentSnapshot userDoc = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(userId)
+            .get();
+        
+        if (userDoc.exists) {
+          setState(() {
+            Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
+            name = userData['displayname'];
+            currentimage = userData['imageurl'];
+          });
+        }
+      }
+    } catch (e) {
+      print('Error loading user data: $e');
+    }
+  }
+
+  Future<void> _updateDisplayName() async {
+    if (_displayNameController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Please enter a display name')),
+      );
+      return;
+    }
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      String userId = _auth.currentUser!.uid;
+      await FirebaseFirestore.instance.collection('users').doc(userId).update({
+        'displayname': _displayNameController.text,
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Display name updated successfully')),
+      );
+      setState(() {
+        name = _displayNameController.text;
+      });
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error updating display name: $e')),
+      );
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
+  Future<void> _updateProfileImage() async {
+    if (imagestring == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Please select an image first')),
+      );
+      return;
+    }
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      String userId = _auth.currentUser!.uid;
+      String cleanBase64 = imagestring!.replaceAll(RegExp(r'\s+'), '');
+      
+      await FirebaseFirestore.instance.collection('users').doc(userId).update({
+        'imageurl': cleanBase64,
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Profile image updated successfully')),
+      );
+      setState(() {
+        currentimage = cleanBase64;
+      });
+    } catch (e) {
+      print('Error updating profile image: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error updating profile image: $e')),
+      );
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -534,7 +642,111 @@ class _profilescreenState extends State<profilescreen> {
         title: Text('Profile Screen'),
       ),
       body: Center(
-        child: Text('Welcome to the Profile Screen!'),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            currentimage == null ?
+              Icon(Icons.account_circle, size: 225) :
+              ClipRRect(
+                borderRadius: BorderRadius.circular(100.0),
+                child: Image.memory(
+                  base64Decode(currentimage!),
+                  height: 200,
+                  width: 200,
+                fit: BoxFit.cover,
+                ),
+              ),
+            Text(name!),
+            Text('Display Name'),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: TextField(
+                controller: _displayNameController,
+                decoration: InputDecoration(
+                  labelText: 'New Display Name',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+            ),
+            ElevatedButton(
+              onPressed: _isLoading ? null : _updateDisplayName,
+              child: _isLoading 
+                ? SizedBox(
+                    width: 20,
+                    height: 20,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  )
+                : Text('Update Display Name'),
+            ),
+            SizedBox(height: 20),
+            Text('Profile Picture'),
+            ElevatedButton(
+              onPressed: () async {
+                final ImagePicker picker = ImagePicker();
+                final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+                if (image != null) {
+                  final Uint8List bytes = await image.readAsBytes();
+                  setState(() {
+                    imagestring = base64Encode(bytes);
+                  });
+                  print('Selected image path: ${image.path}');
+                }
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color.fromARGB(255, 188, 44, 44),
+              ),
+              child: Text(
+                'Select Image',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+            if (imagestring != null) ...[
+              SizedBox(height: 10),
+                Text(
+                  'Image selected',
+                  style: TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
+              SizedBox(height: 10),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(100.0),
+                child: Builder(
+                  builder: (context) {
+                    try {
+                      return Image.memory(
+                        base64Decode(imagestring!),
+                        height: 200,
+                        width: 200,
+                        fit: BoxFit.cover,
+                      );
+                    } catch (e) {
+                      return Container(
+                        height: 150,
+                        width: 200,
+                        color: Colors.grey[300],
+                        child: Center(
+                          child: Text('Error loading image'),
+                        ),
+                      );
+                    }
+                  },
+                ),
+              ),
+              SizedBox(height: 10),
+              ElevatedButton(
+                onPressed: _isLoading ? null : _updateProfileImage,
+                child: _isLoading 
+                  ? SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                  : Text('Save Profile Image'),
+              ),
+            ],
+          ],
+        ),
       ),
     );
   }
