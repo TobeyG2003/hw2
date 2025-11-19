@@ -182,6 +182,54 @@ class Signup extends StatefulWidget {
 }
 
 class _SignupState extends State<Signup> {
+  final FirebaseAuth auth = FirebaseAuth.instance;
+
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _displayNameController = TextEditingController();
+  final TextEditingController _firstNameController = TextEditingController();
+  final TextEditingController _lastNameController = TextEditingController();
+  bool _fail = false;
+  String error = '';
+
+  void _register() async {
+    try {
+      UserCredential userCredential = await auth.createUserWithEmailAndPassword(
+        email: _emailController.text,
+        password: _passwordController.text,
+      );
+      
+      // Add user to Firestore using the Firebase Auth UID
+      await addUser(userCredential.user!.uid);
+      
+      final snackBar = SnackBar(
+        content: const Text('Registration Successful'),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      Navigator.pop(context);
+    } catch (e) {
+      setState(() {
+        _fail = true;
+      });
+    }
+  }
+
+  Future<void> addUser(String userId) async {
+    try {
+      await FirebaseFirestore.instance.collection('users').doc(userId).set({
+        'userid': userId,
+        'displayname': _displayNameController.text,
+        'firstname': _firstNameController.text,
+        'lastname': _lastNameController.text,
+        'role': 'user',
+        'signupdate': DateTime.now(),
+      });
+    } catch (e) {
+      _fail = true;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -193,6 +241,92 @@ class _SignupState extends State<Signup> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    TextFormField(
+                      controller: _emailController,
+                      decoration: InputDecoration(labelText: 'Email'),
+                      validator: (value) {
+                        if (value?.isEmpty??true) {
+                          return 'Please enter your email';
+                        }
+                        return null;
+                      },
+                    ),
+
+                    TextFormField(
+                      controller: _displayNameController,
+                      decoration: InputDecoration(labelText: 'Display Name'),
+                      validator: (value) {
+                        if (value?.isEmpty??true) {
+                          return 'Please enter your display name';
+                        }
+                        return null;
+                      },
+                    ),
+                    TextFormField(
+                      controller: _firstNameController,
+                      decoration: InputDecoration(labelText: 'First Name'),
+                      validator: (value) {
+                        if (value?.isEmpty??true) {
+                          return 'Please enter your first name';
+                        }
+                        return null;
+                      },
+                    ),
+                    TextFormField(
+                      controller: _lastNameController,
+                      decoration: InputDecoration(labelText: 'Last Name'),
+                      validator: (value) {
+                        if (value?.isEmpty??true) {
+                          return 'Please enter your last name';
+                        }
+                        return null;
+                      },
+                    ),
+                    TextFormField(
+                      controller: _passwordController,
+                      decoration: InputDecoration(labelText: 'Password'),
+                      obscureText: true,
+                      validator: (value) {
+                        if (value?.isEmpty??true) {
+                          return 'Please enter your password';
+                        }
+                        return null;
+                      },
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(vertical: 16.0),
+                      alignment: Alignment.center,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            _register();
+                          }
+                        },
+                        child: Text('Submit'),
+                      ),
+                    ),
+                    Container(
+                      alignment: Alignment.center,
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Text(
+                        _fail
+                            ? 'Registration failed - $error'
+                            : 'Enter email and password to register',
+                        style:
+                            TextStyle(color: _fail ? Colors.red : Colors.green),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ],
         ),
       ),
@@ -214,6 +348,124 @@ class _SelectScreenState extends State<SelectScreen> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text('Selection'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => GamesScreen()),
+                );
+              },
+              child: Text('Games'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => FilmsScreen()),
+                );
+              },
+              child: Text('Films'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => TVScreen()),
+                );
+              },
+              child: Text('TV Shows'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => BooksScreen()),
+                );
+              },
+              child: Text('Books'),
+            ),
+          ],
+        ),
+    ),
+    );
+  }
+}
+
+class GamesScreen extends StatefulWidget {
+  @override
+  _GamesScreenState createState() => _GamesScreenState();
+}
+
+class _GamesScreenState extends State<GamesScreen> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Games'),
+      ),
+      body: Center(
+        child: Text('Welcome to the Games Screen!'),
+      ),
+    );
+  }
+}
+
+class FilmsScreen extends StatefulWidget {
+  @override
+  _FilmsScreenState createState() => _FilmsScreenState();
+}
+
+class _FilmsScreenState extends State<FilmsScreen> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Films'),
+      ),
+      body: Center(
+        child: Text('Welcome to the Films Screen!'),
+      ),
+    );
+  }
+}
+class TVScreen extends StatefulWidget {
+  @override
+  _TVScreenState createState() => _TVScreenState();
+}
+
+class _TVScreenState extends State<TVScreen> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('TV Shows'),
+      ),
+      body: Center(
+        child: Text('Welcome to the TV Shows Screen!'),
+      ),
+    );
+  }
+}
+
+class BooksScreen extends StatefulWidget {
+  @override
+  _BooksScreenState createState() => _BooksScreenState();
+}
+
+class _BooksScreenState extends State<BooksScreen> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Books'),
+      ),
+      body: Center(
+        child: Text('Welcome to the Books Screen!'),
       ),
     );
   }
