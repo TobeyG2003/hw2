@@ -211,22 +211,32 @@ class _SignupState extends State<Signup> {
     } catch (e) {
       setState(() {
         _fail = true;
+        error = e.toString();
       });
+      print('Registration error: $e');
     }
   }
 
   Future<void> addUser(String userId) async {
     try {
+      print('Adding user to Firestore with ID: $userId');
       await FirebaseFirestore.instance.collection('users').doc(userId).set({
         'userid': userId,
         'displayname': _displayNameController.text,
         'firstname': _firstNameController.text,
         'lastname': _lastNameController.text,
         'role': 'user',
-        'signupdate': DateTime.now(),
+        'imageurl': null,
+        'signupdate': Timestamp.fromDate(DateTime.now()),
       });
+      print('User successfully added to Firestore');
     } catch (e) {
-      _fail = true;
+      print('Error adding user to Firestore: $e');
+      setState(() {
+        _fail = true;
+        error = e.toString();
+      });
+      rethrow;
     }
   }
 
@@ -349,6 +359,46 @@ class _SelectScreenState extends State<SelectScreen> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text('Selection'),
       ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            const DrawerHeader(
+              child: Text('Navigation Menu'),
+            ),
+            ListTile(
+              title: const Text('Message Boards'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SelectScreen()),
+                );
+              },
+            ),
+            ListTile(
+              title: const Text('My Profile'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => profilescreen()),
+                );
+              },
+            ),
+            ListTile(
+              title: const Text('Settings'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => settingsscreen()),
+                );
+              },
+            ),
+          ],
+        ),
+      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -466,6 +516,44 @@ class _BooksScreenState extends State<BooksScreen> {
       ),
       body: Center(
         child: Text('Welcome to the Books Screen!'),
+      ),
+    );
+  }
+}
+
+class profilescreen extends StatefulWidget {
+  @override
+  _profilescreenState createState() => _profilescreenState();
+}
+
+class _profilescreenState extends State<profilescreen> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Profile Screen'),
+      ),
+      body: Center(
+        child: Text('Welcome to the Profile Screen!'),
+      ),
+    );
+  }
+}
+
+class settingsscreen extends StatefulWidget {
+  @override
+  _settingsscreenState createState() => _settingsscreenState();
+}
+
+class _settingsscreenState extends State<settingsscreen> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Settings Screen'),
+      ),
+      body: Center(
+        child: Text('Welcome to the Settings Screen!'),
       ),
     );
   }
