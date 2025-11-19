@@ -38,8 +38,8 @@ class Splash extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(title),
+        backgroundColor: const Color.fromARGB(255, 98, 39, 176),
+        title: Text(title, style: TextStyle(color: Colors.white)),
       ),
       body: Center(
         child: Column(
@@ -111,8 +111,8 @@ class _SigninState extends State<Signin> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
+        backgroundColor: const Color.fromARGB(255, 98, 39, 176),
+        title: Text(widget.title, style: TextStyle(color: Colors.white)),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -251,8 +251,8 @@ class _SignupState extends State<Signup> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text('Signup'),
+        backgroundColor: const Color.fromARGB(255, 98, 39, 176),
+        title: Text('Signup', style: TextStyle(color: Colors.white)),
       ),
       body: Center(
         child: Column(
@@ -379,8 +379,8 @@ class _SelectScreenState extends State<SelectScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text('Message Boards'),
+        backgroundColor: const Color.fromARGB(255, 98, 39, 176),
+        title: Text('Message Boards', style: TextStyle(color: Colors.white),),
       ),
       drawer: appbarDrawer(),
       body: Column(
@@ -414,7 +414,13 @@ class _SelectScreenState extends State<SelectScreen> {
                           fontSize: 56,
                           fontWeight: FontWeight.bold,
                         color: Colors.black,
-                        
+                        shadows: [
+                          Shadow(
+                            blurRadius: 10.0,
+                            color: Colors.white,
+                            offset: Offset(2.0, 2.0),
+                          ),
+                        ],
                       ),
                     ),
                     ),
@@ -489,6 +495,13 @@ class _SelectScreenState extends State<SelectScreen> {
                           fontSize: 56,
                           fontWeight: FontWeight.bold,
                         color: Colors.black,
+                        shadows: [
+                          Shadow(
+                            blurRadius: 10.0,
+                            color: Colors.white,
+                            offset: Offset(2.0, 2.0),
+                          ),
+                        ],
                       ),
                     ),
                     ),
@@ -724,13 +737,13 @@ class _profilescreenState extends State<profilescreen> {
   Widget build(BuildContext context) {
     if (_isLoadingData) {
       return Scaffold(
-        appBar: AppBar(title: Text('Profile Screen')),
+        appBar: AppBar(title: Text('Profile Screen', style: TextStyle(color: Colors.white)), backgroundColor: const Color.fromARGB(255, 98, 39, 176),),
         body: Center(child: CircularProgressIndicator()),
       );
     }
 
     return Scaffold(
-      appBar: AppBar(title: Text('Profile Screen')),
+      appBar: AppBar(title: Text('Profile Screen', style: TextStyle(color: Colors.white)), backgroundColor: const Color.fromARGB(255, 98, 39, 176),),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -957,7 +970,7 @@ class _settingsscreenState extends State<settingsscreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Settings Screen')),
+      appBar: AppBar(title: Text('Settings Screen', style: TextStyle(color: Colors.white)), backgroundColor: const Color.fromARGB(255, 98, 39, 176),),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -1119,12 +1132,15 @@ class appbarDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
+      backgroundColor: const Color.fromARGB(255, 98, 39, 176),
         child: ListView(
           padding: EdgeInsets.zero,
           children: <Widget>[
-            const DrawerHeader(child: Text('Navigation Menu')),
+            const DrawerHeader(child: Text('Navigation', style: TextStyle(color: Colors.white, fontSize: 50)), 
+            decoration: BoxDecoration(color: Color.fromARGB(255, 98, 39, 176)),),
             ListTile(
-              title: const Text('Message Boards'),
+              title: const Text('Message Boards', style: TextStyle(color: Colors.white, fontSize: 25)),
+              trailing: Icon(Icons.message, color: Colors.white,),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(
@@ -1134,7 +1150,8 @@ class appbarDrawer extends StatelessWidget {
               },
             ),
             ListTile(
-              title: const Text('My Profile'),
+              title: const Text('My Profile', style: TextStyle(color: Colors.white, fontSize: 25)),
+              trailing: Icon(Icons.account_circle, color: Colors.white,),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(
@@ -1144,7 +1161,8 @@ class appbarDrawer extends StatelessWidget {
               },
             ),
             ListTile(
-              title: const Text('Settings'),
+              title: const Text('Settings', style: TextStyle(color: Colors.white, fontSize: 25)),
+              trailing: Icon(Icons.settings, color: Colors.white,),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(
@@ -1218,7 +1236,10 @@ class _messageroombodyState extends State<messageroombody> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(widget.title)),
+      appBar: AppBar(
+        backgroundColor: const Color.fromARGB(255, 98, 39, 176),
+        title: Text(widget.title, style: TextStyle(color: Colors.white)),
+      ),
       drawer: appbarDrawer(),
       body: Column(
         children: [
